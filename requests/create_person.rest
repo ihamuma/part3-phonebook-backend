@@ -1,7 +1,7 @@
-POST http://localhost:3001/api/persons
+POST https://obscure-refuge-87079.herokuapp.com/api/persons
 Content-Type: application/json
 
 {
-    "name": "Testing",
+    "name": "Testing Person",
     "number": "1234567890"
 }
