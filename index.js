@@ -37,7 +37,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :d
       return response.status(204).end()
     } else {
       return response.status(400).json({
-        error: 'content missing'
+        error: 'name missing'
     })
     }
   })
@@ -50,8 +50,8 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :d
   app.post('/api/persons', (request, response) => {
     const body = request.body
     
-    if (body.content === undefined) {
-      return response.status(400).json({ error: 'content missing' })
+    if (body.name === undefined) {
+      return response.status(400).json({ error: 'name missing' })
     }
 
     const person = new Person({
@@ -60,7 +60,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :d
     })
 
     console.log('person', person)
-
+    
     person.save().then(savedPerson => {
       response.json(savedPerson)
     })
