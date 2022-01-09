@@ -1,4 +1,4 @@
-POST https://obscure-refuge-87079.herokuapp.com/api/persons
+POST https://localhost:3001/api/persons
 Content-Type: application/json
 
 {

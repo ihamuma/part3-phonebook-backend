@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+require('dotenv').config()
 
 if (process.argv.length < 3) {
   console.log('Please provide the password as an argument: node mongo.js <password>')
@@ -15,10 +16,7 @@ if (process.argv.length > 5 ) {
     process.exit(1)
 }
 
-const password = process.argv[2]
-
-const url =
-  `mongodb+srv://fullstack:${password}@phonebook.xu9n4.mongodb.net/phonebook-app?retryWrites=true&w=majority`
+const url = process.env.MONGODB_URI
 
 mongoose.connect(url)
 
@@ -26,6 +24,14 @@ const personSchema = new mongoose.Schema({
   name: String,
   number: String,
   id: Number,
+})
+
+personSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        returnedObject.id = returnedObject._id.toString()
+        delete returnedObject._id
+        delete returnedObject.__v
+    }
 })
 
 const Person = mongoose.model('Person', personSchema)
@@ -43,15 +49,9 @@ if (process.argv.length == 3) {
 
 if (process.argv.length == 5 ) {
 
-    const generateId = () => {
-        const id = Math.ceil(Math.random() * Number.MAX_SAFE_INTEGER)
-        return id
-      }
-
     const person = new Person({
         name: process.argv[3],
         number: process.argv[4],
-        id: generateId()
         })
 
         person.save().then(result => {
