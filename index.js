@@ -49,9 +49,8 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :d
 
   app.post('/api/persons', (request, response) => {
     const body = request.body
-    console.log('body', body)
+
     if (body.name === undefined) {
-      console.log('name', body.name)
       return response.status(400).json({ error: 'name missing' })
     }
 
