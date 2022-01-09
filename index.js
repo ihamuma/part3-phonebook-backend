@@ -42,11 +42,6 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :d
     }
   })
 
-//  const generateId = () => {
-//   const id = Math.ceil(Math.random() * Number.MAX_SAFE_INTEGER)
-//    return id
-//  }
-
   app.post('/api/persons', (request, response) => {
     const body = request.body
 
