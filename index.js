@@ -40,15 +40,14 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :d
 })
 
   app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    if (persons.some(p => p.id === id)) {
-      persons = persons.filter(person => person.id !== id)
-      return response.status(204).end()
-    } else {
-      return response.status(400).json({
-        error: 'name missing'
-    })
-    }
+    Person.findByIdAndRemove(request.params.id)
+      .then(result => {
+        response.status(204).end
+      })
+      .catch(error => {
+        console.log(error)
+        response.status(400).send({ error: 'user already deleted from server' })
+      })
   })
 
   app.post('/api/persons', (request, response) => {
