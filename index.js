@@ -15,7 +15,6 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :d
   
   app.get('/api/persons', (request, response) => {
     Person.find({}).then(people => {
-      console.log("people", people)
       response.json(people)
     })
   })
@@ -43,7 +42,6 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :d
   app.delete('/api/persons/:id', (request, response) => {
     Person.findByIdAndRemove(request.params.id)
       .then(result => {
-        console.log("delete response", response)
         response.status(204).end()
       })
       .catch(error => {
