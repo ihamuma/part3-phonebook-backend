@@ -30,7 +30,7 @@ app.get('/api/persons', (request, response) => {
   })
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
     .then(person => {
       if (person) {
@@ -47,10 +47,17 @@ app.get('/info', (request, response) => {
   <p>${new Date()}</p>`)
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
     .then(result => {
-      response.status(204).end()
+      console.log(result)
+      if (result) {
+        response.status(204).end()
+      } else {
+        response.status(400).json({
+          error: 'content missing'
+        })
+      }
     })
     .catch(error => next(error))
 })
