@@ -3,15 +3,16 @@ const Person = require('./models/person')
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
+//const req = require('express/lib/request')
 const app = express()
 
 app.use(express.static('build'))
 app.use(express.json())
 app.use(cors())
+
 morgan.token('data', (req, res) => {
   return JSON.stringify(req.body)
 })
-
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data' ))
 
 const errorHandler = (error, request, response, next) => {
@@ -24,16 +25,18 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
-app.get('/api/persons', (request, response) => {
-  Person.find({}).then(people => {
-    response.json(people)
-  })
+app.get('/api/persons', (request, response, next) => {
+  Person.find({})
+    .then(people => {
+      response.json(people)
+    })
+    .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
     .then(person => {
-      if (person) {
+      if (person) {s
         response.json(person)
       } else {
         response.status(404).end
@@ -43,6 +46,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 })
 
 app.get('/info', (request, response) => {
+  console.log('request body', request.body)
   response.send(`<p>Phonebook has info for ${persons.length} people</p>
   <p>${new Date()}</p>`)
 })
@@ -50,7 +54,6 @@ app.get('/info', (request, response) => {
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
     .then(result => {
-      console.log(result)
       if (result) {
         response.status(204).end()
       } else {
