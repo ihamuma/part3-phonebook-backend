@@ -21,10 +21,15 @@ const url = process.env.MONGODB_URI
 mongoose.connect(url)
 
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
-  id: Number,
+  name: {
+    type: String,
+    minlength: 3,
+    required: true
+  },
+  number: String
 })
+
+console.log('schema defined in mongo.js')
 
 personSchema.set('toJSON', {
     transform: (document, returnedObject) => {
@@ -48,14 +53,13 @@ if (process.argv.length == 3) {
 }
 
 if (process.argv.length == 5 ) {
-
     const person = new Person({
         name: process.argv[3],
         number: process.argv[4],
         })
-
-        person.save().then(result => {
-        console.log(`Added ${person.name}, number ${person.number}, to phonebook`)
-        mongoose.connection.close()
-        })
+    person.save()
+      .then(result => {
+      console.log(`Added ${person.name}, number ${person.number}, to phonebook`)
+      mongoose.connection.close()
+    })
 }
