@@ -13,10 +13,14 @@ mongoose.connect(url)
 const personSchema = new mongoose.Schema({
   name: {
     type: String,
-    minlength: 3,
+    minlength: 3, //[3, 'Minimum length for name is 3'], custom message
     required: true
   },
-  number: String
+  number: {
+    type: String,
+    minlength: 8,
+    required: true
+  }
 })
 
 console.log('schema defined in person.js')
